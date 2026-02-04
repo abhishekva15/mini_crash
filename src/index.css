@@ -86,13 +86,14 @@ img {
 .max_odds {
   height: 22px;
   /* border: 1px solid red; */
-  width: calc(100% - 160px);
+  /* width: calc(100% - 160px); */
   padding: 1px;
   position: relative;
   justify-content: space-between;
   display: flex;
   align-items: center;
   gap: 2px;
+  overflow-y: auto;
 }
 
 .max-odd {
@@ -112,6 +113,54 @@ img {
 
 .slide-in-zoom {
   animation: slideInZoom 0.5s ease-out;
+}
+
+.menu_icon {
+  position: absolute;
+  right: 1px;
+  top: 2.4rem;
+  background: rgba(27, 27, 27, 1);
+  padding-inline: 6px;
+  padding-bottom: 3px;
+}
+
+.menu_model {
+  background-color: #2c2d30;
+  border-radius: 10px;
+  padding: 0;
+  position: absolute;
+  transition: all 0.4s linear;
+  z-index: 1000;
+  height: 170px;
+  overflow-y: auto;
+  right: 0px;
+  top: 3.9rem;
+  width: 206px;
+}
+
+.menu-dropdown-list {
+  align-items: center;
+  background-color: #1b1c1d;
+  border-bottom: 1.5px solid #2c2d30;
+  display: flex;
+  height: 34px;
+  justify-content: space-between;
+  margin-bottom: 0;
+  padding: 7px 10px;
+}
+
+.menu-dropdown-item {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-start;
+}
+
+.aviator-heading h6 {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 400 !important;
+  line-height: 12px;
 }
 
 @keyframes slideInZoom {

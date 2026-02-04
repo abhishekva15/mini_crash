@@ -3,17 +3,16 @@ import { useSocketContext } from "../../context/socket/SocketContext";
 import { useGameContext } from "../../context/GameContext";
 
 const InputContainer: React.FC = () => {
-  const { info, planeData } = useSocketContext();
-  const { amount, setAmount } = useGameContext();
+  const { info } = useSocketContext();
+  const { amount, setAmount, betPlaced } = useGameContext();
 
   const maxAmount: number = Math.min(Number(info.balance), 25000.0);
   const minAmount: number = 20.0;
-  const parsedBetData: string[] | null =
-    planeData.length > 0 ? planeData.split(":") : null;
-  const planeStatus: string | number =
-    parsedBetData && parsedBetData.length > 0 ? parsedBetData[2] : 0;
-  const disableButton: boolean =
-    planeStatus == 1 || planeStatus == 2 ;
+  // const parsedBetData: string[] | null =
+  //   planeData.length > 0 ? planeData.split(":") : null;
+  // const planeStatus: string | number =
+  //   parsedBetData && parsedBetData.length > 0 ? parsedBetData[2] : 0;
+  const disableButton: boolean = betPlaced;
 
   const handleIncrease = () => {
     if (disableButton || Number(amount) == maxAmount) return;

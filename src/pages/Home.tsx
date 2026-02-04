@@ -1,29 +1,30 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import Header from "../components/header/Header";
 import Canvas from "../components/canvas/canvas";
 import LeftPart from "../components/leftPart/LeftPart";
 import { useSocketContext } from "../context/socket/SocketContext";
-import type { MaxOddsData } from "../types/socketType";
+import MaxOdds from "../components/maxOdds/MaxOdds";
+import MultText from "./MultText";
+import { icon } from "../utils/icon";
+import MenuModel from "../model/MenuModel";
+import { useGameContext } from "../context/GameContext";
+import BetHistory from "../model/BetHistory";
+import GameLimits from "../model/GameLimits";
+import RulesModel from "../model/RulesModel";
 
 const Home: React.FC = () => {
-  const { planeData, maxOdds } = useSocketContext();
+  const {
+    openBetModel,
+    setOpenBetModel,
+    openBetHistory,
+    openGameLimits,
+    openRulesModal,
+  } = useGameContext();
+  const { planeData } = useSocketContext();
   const parsedBetData = planeData?.split(":") ?? [];
   const planeMutiplier = parsedBetData.length >= 2 ? parsedBetData[1] : "0";
-
-  const [animateAll, setAnimateAll] = useState(false);
-  const prevMaxOddsRef = useRef<MaxOddsData[]>([]);
-
-  useEffect(() => {
-    const prev = prevMaxOddsRef.current;
-    const changed = JSON.stringify(prev) !== JSON.stringify(maxOdds);
-
-    if (changed && maxOdds.length > 0) {
-      setAnimateAll(true);
-      setTimeout(() => setAnimateAll(false), 600);
-    }
-
-    prevMaxOddsRef.current = maxOdds;
-  }, [maxOdds]);
+  const planeStatus: string | number =
+    parsedBetData && parsedBetData.length > 0 ? parsedBetData[2] : 0;
 
   return (
     <>
@@ -36,31 +37,24 @@ const Home: React.FC = () => {
                 <LeftPart />
               </div>
               <div className="right_canvas">
-                <div className="max_odds">
-                  {maxOdds?.map((el, i) => (
-                    <div
-                      key={i}
-                      className={`max-odd ${animateAll && i === 0 ? "slide-in-zoom" : ""}`}
-                      style={{
-                        color:
-                          Number(el.round_max_mult) > 10
-                            ? "#C017B4"
-                            : Number(el.round_max_mult) >= 2
-                              ? "#913EF8"
-                              : "#34B4FF",
-                        fontWeight: "700",
-                        opacity: i === 0 || i === 1 ? 1 : undefined,
-                      }}
-                      // onClick={() => handleRoundModal(el)}
-                    >
-                      {el?.round_max_mult}x
-                    </div>
-                  ))}
+                <MaxOdds />
+                <div
+                  className="menu_icon"
+                  onClick={() => {
+                    setOpenBetModel((prv) => !prv);
+                  }}
+                >
+                  <img src={icon?.menuIcon} alt="" />
                 </div>
+                {openBetModel && <MenuModel />}
                 <div className="canvas_section">
                   <Canvas
                     planeMultiplier={planeMutiplier}
                     planeData={planeData}
+                  />
+                  <MultText
+                    planeMultiplier={planeMutiplier}
+                    planeStatus={planeStatus}
                   />
                 </div>
               </div>
@@ -68,6 +62,9 @@ const Home: React.FC = () => {
           </div>
         </div>
       </div>
+      {openBetHistory && <BetHistory />}
+      {openGameLimits && <GameLimits />}
+      {openRulesModal && <RulesModel />}
     </>
   );
 };

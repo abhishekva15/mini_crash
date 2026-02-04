@@ -1,8 +1,13 @@
 import React from "react";
 import "./Header.css";
 import { icon } from "../../utils/icon";
+import { useSocketContext } from "../../context/socket/SocketContext";
+import BetPlace from "../../popups/BetPlace";
+import Error from "../../popups/Error";
+import WinPop from "../../popups/WinPop";
 
 const Header: React.FC = () => {
+  const { betPlaceSucc, errorModel, winPopup } = useSocketContext();
   return (
     <>
       <div className="header">
@@ -32,6 +37,9 @@ const Header: React.FC = () => {
           />
         </div>
       </div>
+      {betPlaceSucc && <BetPlace />}
+      {errorModel && <Error />}
+      {winPopup && <WinPop />}
     </>
   );
 };

@@ -151,10 +151,11 @@
   justify-content: space-between;
 }
 
-.yes_btn {
-  width: 48%;
+.processing_btn {
+  width: 100%;
   height: 30px;
   border-radius: 4px;
+  font-size: 11px;
   color: #fff;
   display: flex;
   justify-content: center;
@@ -164,4 +165,31 @@
     linear-gradient(180deg, #88cf77 0%, #5eb952 100%) border-box;
 
   border: 1px solid transparent;
+}
+
+.cancel-btn {
+  background: #d0021b !important;
+  border: 1px solid #cb011a !important;
+  color: white !important;
+}
+
+.yes_btn {
+  width: 48%;
+  height: 30px;
+  border-radius: 4px;
+  color: #fff;
+  display: flex;
+  font-size: 11px;
+  justify-content: center;
+  align-items: center;
+  background:
+    linear-gradient(180deg, #28a909 0%, #1e4e12 100%) padding-box,
+    linear-gradient(180deg, #88cf77 0%, #5eb952 100%) border-box;
+
+  border: 1px solid transparent;
+}
+
+.disbale_btn {
+  opacity: 0.5;
+  pointer-events: none;
 }

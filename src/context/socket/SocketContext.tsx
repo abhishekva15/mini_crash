@@ -1,7 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { Socket } from "socket.io-client";
-import type { Info, MaxOddsData } from "../../types/socketType";
+import {
+  type GameStatus,
+  type Info,
+  type MaxOddsData,
+} from "../../types/socketType";
 import { createSocket } from "../../utils/newSocket";
 
 interface SocketContextProps {
@@ -11,6 +15,16 @@ interface SocketContextProps {
   token: string;
   planeData: string;
   maxOdds: MaxOddsData[];
+  betPlaceSucc: boolean;
+  setBetPlaceSucc: React.Dispatch<React.SetStateAction<boolean>>;
+  errorText: string;
+  setErrorText: React.Dispatch<React.SetStateAction<string>>;
+  errorModel: boolean;
+  setErrorModel: React.Dispatch<React.SetStateAction<boolean>>;
+  settlementData: any | null;
+  winPopup: boolean;
+  setWinPopup: React.Dispatch<React.SetStateAction<boolean>>;
+  betData: GameStatus[];
 }
 
 export const SocketContext = createContext<SocketContextProps | undefined>(
@@ -26,7 +40,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const decodedQuery = decodeURIComponent(rawQuery);
 
   const [info, setInfo] = useState<Info>({
-    id: "",
+    user_id: "",
     image: "",
     balance: "",
     operator_id: "",
@@ -36,6 +50,12 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string>("");
   const [planeData, setPlaneData] = useState<string>("");
   const [maxOdds, setMaxOdds] = useState<MaxOddsData[]>([]);
+  const [betPlaceSucc, setBetPlaceSucc] = useState<boolean>(false);
+  const [errorText, setErrorText] = useState<string>("");
+  const [errorModel, setErrorModel] = useState<boolean>(false);
+  const [settlementData, setSettlementData] = useState<any | null>(null);
+  const [winPopup, setWinPopup] = useState<boolean>(false);
+  const [betData, setBetData] = useState<GameStatus[]>([]);
 
   let queryParams: { [key: string]: string } = {};
   try {
@@ -81,6 +101,28 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         }
       });
 
+      socketInstance.on("betError", (data: string) => {
+        setErrorText(data);
+        setErrorModel(true);
+      });
+
+      socketInstance.on("bet", (data: string) => {
+        if (data) {
+          setBetPlaceSucc(true);
+        }
+      });
+
+      socketInstance.on("settlement", (data: any) => {
+        setSettlementData(data);
+        setWinPopup(true);
+      });
+
+      socketInstance.on("game_status", (data: string) => {
+        const gameStatus: GameStatus[] = JSON.parse(data);
+        console.log(gameStatus);
+        setBetData(gameStatus);
+      });
+
       return () => {
         socketInstance.disconnect();
       };
@@ -94,6 +136,16 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     token,
     planeData,
     maxOdds,
+    betPlaceSucc,
+    setBetPlaceSucc,
+    errorText,
+    setErrorText,
+    errorModel,
+    setErrorModel,
+    settlementData,
+    winPopup,
+    setWinPopup,
+    betData,
   };
 
   return (

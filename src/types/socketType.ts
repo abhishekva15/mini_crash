@@ -1,5 +1,5 @@
 export type Info = {
-  id: string;
+  user_id: string;
   image: string;
   balance: string;
   operator_id: string;
@@ -19,3 +19,12 @@ export type MaxOddsData = {
   serverSeed: string;
   client_seeds: ClientData;
 };
+export type GameStatus = {
+  user_id: string;
+  name: string;
+  image: number;
+  bet_amount: number;
+  mult: number;
+  chip: number;
+};
+

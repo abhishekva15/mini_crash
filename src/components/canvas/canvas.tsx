@@ -51,11 +51,11 @@ const Canvas: React.FC<canvasProp> = ({ planeMultiplier, planeData }) => {
     if (status === prevStatusRef.current) return;
     prevStatusRef.current = status;
 
-    if (status === 1) {
+    if (status === 2) {
       WrapperRef.current.animateCurveDrawing();
     } else if (status === 0) {
       WrapperRef.current.resetPlane();
-    } else if (status === 2) {
+    } else if (status === 3) {
       WrapperRef.current.flewAway();
     }
   }, [planeData, WrapperRef.current, multiplier]);
